@@ -185,7 +185,7 @@ function parseKeys(e) {
 const numLenth = (mutations) => {
   mutations.forEach((mutation) => {
     let target = mutation.target.textContent;
-    if (parseFloat(target) > 99999999999) {
+    if (parseFloat(target) > 99999999999 && target.length > 11) {
       mutation.target.textContent = parseFloat(target).toExponential(3);
     } else if (target.length > 11) {
       mutation.target.textContent = mutation.target.textContent.slice(0, -1);
@@ -205,3 +205,4 @@ const config = {
 };
 
 observer.observe(outputScreen, config);
+
