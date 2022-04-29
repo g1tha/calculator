@@ -12,7 +12,6 @@ const multiplyBtn = document.querySelector('.multiply');
 const divideBtn = document.querySelector('.divide');
 const equalsBtn = document.querySelector('.equals');
 
-
 let currentInput = '';
 let args = [];
 
@@ -43,6 +42,9 @@ function addDec() {
 }
 
 function changeSign() {
+  if (currentInput === '') {
+    return;
+  }
   if (currentInput.charAt(0) === '-') {
     currentInput = currentInput.slice(1);
   } else {
@@ -51,7 +53,7 @@ function changeSign() {
   outputScreen.textContent = currentInput;
 }
 function DelChar() {
-  currentInput = currentInput.slice(0, currentInput.length - 1);
+  currentInput = currentInput.slice(0, -1);
   outputScreen.textContent = currentInput;
 }
 
@@ -125,6 +127,7 @@ function evaluate() {
   outputScreen.textContent = currentInput;
   if (args.length === 1) {
     currentInput = args;
+    currentInput = currentInput.toString();
     outputScreen.textContent = currentInput;
     inputScreen.textContent = '';
     args = [];
@@ -179,4 +182,26 @@ function parseKeys(e) {
   if (e.key === '%') {document.querySelector('.pc').click()};
 }
 
+const numLenth = (mutations) => {
+  mutations.forEach((mutation) => {
+    let target = mutation.target.textContent;
+    if (parseFloat(target) > 99999999999) {
+      mutation.target.textContent = parseFloat(target).toExponential(3);
+    } else if (target.length > 11) {
+      mutation.target.textContent = mutation.target.textContent.slice(0, -1);
+    }
+    if (target === 'Infinity') {
+      mutation.target.textContent = 'Try again!';
+    }
+  });
+}
 
+const observer = new MutationObserver(numLenth);
+const config = {
+  characterData: true,
+  attributes: false,
+  childList: true,
+  subtree: false
+};
+
+observer.observe(outputScreen, config);
